@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Naver API Blog Search</title>
+</head>
+<body>
+    <h1>Naver API Blog Search</h1>
+    <div id="results"></div>
+
+    <script>
+        const clientId = "your_client_id_here";
+        const clientSecret = "your_client_secret_here";
+        const query = "제로베이스 PM 학습";
+        
+        const url = `https://openapi.naver.com/v1/search/blog.json?query=${query}&display=10&start=1&sort=sim`;
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Naver-Client-Id': clientId,
+                'X-Naver-Client-Secret': clientSecret
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const resultsDiv = document.getElementById('results');
+            data.items.forEach(item => {
+                const title = item.title.replace(/<[^>]+>/g, '');  // HTML 태그 제거
+                const link = item.link;
+                const description = item.description.replace(/<[^>]+>/g, '');
+                resultsDiv.innerHTML += `<p><strong>${title}</strong><br><a href="${link}">${link}</a><br>${description}</p>`;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
